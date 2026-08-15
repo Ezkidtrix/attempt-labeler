@@ -8,7 +8,6 @@ using namespace geode::prelude;
 
 struct Settings {
   bool enabled = true;
-  int triggerChance = 500;
 };
 static Settings settings;
 

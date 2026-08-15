@@ -7,13 +7,14 @@
 		"ios": "2.2081"
 	},
 	"id": "ezkidtrix.attempt-labeler",
-	"name": "attempt-labeler",
+	"name": "Attempt Labeler",
 	"version": "v1.0.0",
 	"developer": "Ezkidtrix",
 	"description": "places a fun label where you last died",
 	"dependencies": {
 		"geode.node-ids": ">=v1.23.3"
 	},
+	"tags": ["content", "customization", "gameplay", "enhancement", "joke"],
 	"settings": {
 		"enabled": {
 			"type": "bool",
