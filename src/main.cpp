@@ -63,17 +63,29 @@ class $modify(MyPlayLayer, PlayLayer) {
     getPhrases();
     return true;
   }
+
+  void onQuit() {
+    PlayLayer::onQuit();
+
+    if (label) {
+      m_objectLayer->removeChild(label);
+      label = nullptr;
+    }
+  }
 };
 
 class $modify(MyPlayerObject, PlayerObject) {
   void playDeathEffect() {
     PlayerObject::playDeathEffect();
-
     if (!settings.enabled || PlayLayer::get()->m_isEditor) return;
+
+    std::string text = randomLabel();
     auto objectLayer = PlayLayer::get()->m_objectLayer;
 
-    if (label) objectLayer->removeChild(label);
-    std::string text = randomLabel();
+    if (label) {
+      objectLayer->removeChild(label);
+      label = nullptr;
+    }
 
     label = CCLabelBMFont::create(text.c_str(), "bigFont.fnt");
     label->setScale(0.6);
