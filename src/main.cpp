@@ -11,7 +11,6 @@ struct Settings {
 };
 static Settings settings;
 
-CCLabelBMFont* label = nullptr;
 std::vector<std::string> phrases;
 
 void getPhrases() {
@@ -63,37 +62,29 @@ class $modify(MyPlayLayer, PlayLayer) {
     getPhrases();
     return true;
   }
-
-  void onQuit() {
-    PlayLayer::onQuit();
-
-    if (label) {
-      m_objectLayer->removeChild(label);
-      label = nullptr;
-    }
-  }
 };
 
 class $modify(MyPlayerObject, PlayerObject) {
+  struct Fields {
+    CCLabelBMFont* m_label;
+  };
+
   void playDeathEffect() {
     PlayerObject::playDeathEffect();
-    if (!settings.enabled || PlayLayer::get()->m_isEditor) return;
 
+    if (!settings.enabled || !PlayerObject::isVanillaPlayer()) return;
     std::string text = randomLabel();
-    auto objectLayer = PlayLayer::get()->m_objectLayer;
 
-    if (label) {
-      objectLayer->removeChild(label);
-      label = nullptr;
+    if (m_fields->m_label) {
+      m_gameLayer->m_objectLayer->removeChild(m_fields->m_label);
+      m_fields->m_label = nullptr;
     }
 
-    label = CCLabelBMFont::create(text.c_str(), "bigFont.fnt");
-    label->setScale(0.6);
+    m_fields->m_label = CCLabelBMFont::create(text.c_str(), "bigFont.fnt");
+    m_fields->m_label->setScale(0.6);
 
-    CCPoint pos = this->getPosition();
-    label->setPosition(CCPoint{ pos.x, pos.y + 30 });
-
-    objectLayer->addChild(label, 1000);
+    m_fields->m_label->setPosition(CCPoint{ m_position.x, m_position.y + 30 });
+    m_gameLayer->m_objectLayer->addChild(m_fields->m_label, 1000);
   }
 };
 
