@@ -1,7 +1,8 @@
-#include "Geode/cocos/label_nodes/CCLabelBMFont.h"
+#include <Geode/cocos/label_nodes/CCLabelBMFont.h>
 #include <Geode/Geode.hpp>
 #include <Geode/loader/SettingV3.hpp>
 #include <Geode/modify/PlayLayer.hpp>
+#include <Geode/modify/PlayerObject.hpp>
 
 using namespace geode::prelude;
 
@@ -79,7 +80,7 @@ class $modify(MyPlayerObject, PlayerObject) {
 
     PlayLayer::get()->m_objectLayer->addChild(label, 1000);
   }
-}
+};
 
 $on_mod(Loaded) {
   getPhrases();
