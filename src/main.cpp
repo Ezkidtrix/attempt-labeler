@@ -62,25 +62,24 @@ class $modify(MyPlayLayer, PlayLayer) {
     getPhrases();
     return true;
   }
+};
 
-  void destroyPlayer(PlayerObject* player, GameObject* object) {
-    PlayLayer::destroyPlayer(player, object);
-    
-    if (!settings.enabled) return;
+class $modify(MyPlayerObject, PlayerObject) {
+  void playDeathEffect() {
+    PlayerObject::playDeathEffect();
+    if (!settings.enabled || PlayLayer::get()->m_isEditor) return;
+
     std::string text = randomLabel();
 
     auto label = CCLabelBMFont::create(text.c_str(), "bigFont.fnt");
     label->setScale(0.6);
 
-    float height = object->getContentHeight() * object->m_height;
-    float offset = (height / 2.0f) + 15.0f;
+    CCPoint pos = this->getPosition();
+    label->setPosition(CCPoint{ pos.x, pos.y + 25 });
 
-    CCPoint pos = object->getPosition();
-    label->setPosition(CCPoint{ pos.x, pos.y + offset });
-
-    m_objectLayer->addChild(label, 1000);
+    PlayLayer::get()->m_objectLayer->addChild(label, 1000);
   }
-};
+}
 
 $on_mod(Loaded) {
   getPhrases();
