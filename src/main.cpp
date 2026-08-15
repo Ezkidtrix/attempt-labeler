@@ -72,7 +72,7 @@ class $modify(MyPlayerObject, PlayerObject) {
   void playDeathEffect() {
     PlayerObject::playDeathEffect();
 
-    if (!settings.enabled || !PlayerObject::isVanillaPlayer()) return;
+    if (!settings.enabled || !PlayerObject::isVanillaPlayer() || !m_gameLayer || m_gameLayer->m_isEditor) return;
     std::string text = randomLabel();
 
     if (m_fields->m_label) {
