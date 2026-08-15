@@ -12,6 +12,7 @@ struct Settings {
 };
 static Settings settings;
 
+CCLabelBMFont* label = nullptr;
 std::vector<std::string> phrases;
 
 void getPhrases() {
@@ -68,17 +69,20 @@ class $modify(MyPlayLayer, PlayLayer) {
 class $modify(MyPlayerObject, PlayerObject) {
   void playDeathEffect() {
     PlayerObject::playDeathEffect();
-    if (!settings.enabled || PlayLayer::get()->m_isEditor) return;
 
+    if (!settings.enabled || PlayLayer::get()->m_isEditor) return;
+    auto objectLayer = PlayLayer::get()->m_objectLayer;
+
+    if (label) objectLayer->removeChild(label);
     std::string text = randomLabel();
 
-    auto label = CCLabelBMFont::create(text.c_str(), "bigFont.fnt");
+    label = CCLabelBMFont::create(text.c_str(), "bigFont.fnt");
     label->setScale(0.6);
 
     CCPoint pos = this->getPosition();
-    label->setPosition(CCPoint{ pos.x, pos.y + 25 });
+    label->setPosition(CCPoint{ pos.x, pos.y + 30 });
 
-    PlayLayer::get()->m_objectLayer->addChild(label, 1000);
+    objectLayer->addChild(label, 1000);
   }
 };
 
