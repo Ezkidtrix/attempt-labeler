@@ -8,7 +8,7 @@
 	},
 	"id": "ezkidtrix.attempt-labeler",
 	"name": "Attempt Labeler",
-	"version": "v1.0.2",
+	"version": "v1.0.3",
 	"developer": "Ezkidtrix",
 	"description": "places a fun label where you last died",
 	"dependencies": {
@@ -20,6 +20,12 @@
 			"type": "bool",
 			"name": "Enable Mod",
 			"default": true
+		},
+		"text-color": {
+			"type": "rgb",
+			"name": "Text Color",
+			"default": "#ffffff",
+			"enable-if": "enabled"
 		}
 	}
 }

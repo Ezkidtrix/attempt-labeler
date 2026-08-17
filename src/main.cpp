@@ -1,3 +1,4 @@
+#include "ccTypes.h"
 #include <Geode/cocos/label_nodes/CCLabelBMFont.h>
 #include <Geode/Geode.hpp>
 #include <Geode/loader/SettingV3.hpp>
@@ -8,6 +9,7 @@ using namespace geode::prelude;
 
 struct Settings {
   bool enabled = true;
+  ccColor3B color;
 };
 static Settings settings;
 
@@ -83,16 +85,24 @@ class $modify(MyPlayerObject, PlayerObject) {
     m_fields->m_label = CCLabelBMFont::create(text.c_str(), "bigFont.fnt");
     m_fields->m_label->setScale(0.6);
 
+    m_fields->m_label->setColor(settings.color);
     m_fields->m_label->setPosition(CCPoint{ m_position.x, m_position.y + 30 });
+    
     m_gameLayer->m_objectLayer->addChild(m_fields->m_label, 1000);
   }
 };
 
 $on_mod(Loaded) {
   getPhrases();
+
   settings.enabled = Mod::get()->getSettingValue<bool>("enabled");
+  settings.color = Mod::get()->getSettingValue<ccColor3B>("text-color");
 
   listenForSettingChanges<bool>("enabled", [](bool value) {
     settings.enabled = value;
+  });
+
+  listenForSettingChanges<ccColor3B>("text-color", [](ccColor3B value) {
+    settings.color = value;
   });
 };
