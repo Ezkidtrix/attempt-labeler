@@ -15,6 +15,9 @@
 		"geode.node-ids": ">=v1.23.3"
 	},
 	"tags": ["content", "customization", "gameplay", "enhancement", "joke"],
+	"links": {
+		"source": "https://github.com/Ezkidtrix/attempt-labeler"
+	},
 	"settings": {
 		"enabled": {
 			"type": "bool",
