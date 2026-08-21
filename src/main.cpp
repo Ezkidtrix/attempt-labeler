@@ -68,27 +68,38 @@ class $modify(MyPlayLayer, PlayLayer) {
 
 class $modify(MyPlayerObject, PlayerObject) {
   struct Fields {
-    CCLabelBMFont* m_label;
+    CCLabelBMFont* m_label1;
+    CCLabelBMFont* m_label2;
   };
 
   void playDeathEffect() {
     PlayerObject::playDeathEffect();
-
     if (!settings.enabled || !PlayerObject::isVanillaPlayer() || !m_gameLayer || m_gameLayer->m_isEditor) return;
+    
     std::string text = randomLabel();
 
-    if (m_fields->m_label) {
-      m_gameLayer->m_objectLayer->removeChild(m_fields->m_label);
-      m_fields->m_label = nullptr;
+    if (m_fields->m_label1) m_gameLayer->m_objectLayer->removeChild(m_fields->m_label1);
+    if (m_fields->m_label2) m_gameLayer->m_objectLayer->removeChild(m_fields->m_label2);
+
+    if (isPlayer1()) {
+      m_fields->m_label1 = CCLabelBMFont::create(text.c_str(), "bigFont.fnt");
+      m_fields->m_label1->setScale(0.6);
+      
+      m_fields->m_label1->setColor(settings.color);
+      m_fields->m_label1->setPosition(CCPoint{ m_position.x, m_position.y + 30 });
+      
+      m_gameLayer->m_objectLayer->addChild(m_fields->m_label1, 1000);
     }
-
-    m_fields->m_label = CCLabelBMFont::create(text.c_str(), "bigFont.fnt");
-    m_fields->m_label->setScale(0.6);
-
-    m_fields->m_label->setColor(settings.color);
-    m_fields->m_label->setPosition(CCPoint{ m_position.x, m_position.y + 30 });
     
-    m_gameLayer->m_objectLayer->addChild(m_fields->m_label, 1000);
+    if (isPlayer2()) {
+      m_fields->m_label2 = CCLabelBMFont::create(text.c_str(), "bigFont.fnt");
+      m_fields->m_label2->setScale(0.6);
+      
+      m_fields->m_label2->setColor(settings.color);
+      m_fields->m_label2->setPosition(CCPoint{ m_position.x, m_position.y + 30 });
+      
+      m_gameLayer->m_objectLayer->addChild(m_fields->m_label2, 1000);
+    }
   }
 };
 
