@@ -9,6 +9,8 @@ using namespace geode::prelude;
 
 struct Settings {
   bool enabled = true;
+  int maxLabels = 10;
+
   ccColor3B color;
 };
 static Settings settings;
@@ -57,6 +59,10 @@ std::string randomLabel() {
 }
 
 class $modify(MyPlayLayer, PlayLayer) {
+  struct Fields {
+    std::vector<CCLabelBMFont*> m_labels;
+  };
+
   bool init(GJGameLevel* level, bool useReplay, bool dontCreateObjects) {
     if (!PlayLayer::init(level, useReplay, dontCreateObjects)) return false;
     if (!settings.enabled) return true;
@@ -64,53 +70,50 @@ class $modify(MyPlayLayer, PlayLayer) {
     getPhrases();
     return true;
   }
-};
 
-class $modify(MyPlayerObject, PlayerObject) {
-  struct Fields {
-    CCLabelBMFont* m_label1;
-    CCLabelBMFont* m_label2;
-  };
+  void destroyPlayer(PlayerObject* player, GameObject* object) {
+    PlayLayer::destroyPlayer(player, object);
+    if (!settings.enabled || !player->isVanillaPlayer() || !player->m_isDead || m_isEditor) return;
 
-  void playDeathEffect() {
-    PlayerObject::playDeathEffect();
-    if (!settings.enabled || !PlayerObject::isVanillaPlayer() || !m_gameLayer || m_gameLayer->m_isEditor) return;
+    if (m_fields->m_labels.size() >= settings.maxLabels) {
+      auto label = m_fields->m_labels[0];
+
+      m_objectLayer->removeChild(label);
+      m_fields->m_labels.erase(m_fields->m_labels.begin());
+    }
     
     std::string text = randomLabel();
-
-    if (m_fields->m_label1) m_gameLayer->m_objectLayer->removeChild(m_fields->m_label1);
-    if (m_fields->m_label2) m_gameLayer->m_objectLayer->removeChild(m_fields->m_label2);
-
-    if (isPlayer1()) {
-      m_fields->m_label1 = CCLabelBMFont::create(text.c_str(), "bigFont.fnt");
-      m_fields->m_label1->setScale(0.6);
-      
-      m_fields->m_label1->setColor(settings.color);
-      m_fields->m_label1->setPosition(CCPoint{ m_position.x, m_position.y + 30 });
-      
-      m_gameLayer->m_objectLayer->addChild(m_fields->m_label1, 1000);
-    }
+    auto label = CCLabelBMFont::create(text.c_str(), "bigFont.fnt");
     
-    if (isPlayer2()) {
-      m_fields->m_label2 = CCLabelBMFont::create(text.c_str(), "bigFont.fnt");
-      m_fields->m_label2->setScale(0.6);
-      
-      m_fields->m_label2->setColor(settings.color);
-      m_fields->m_label2->setPosition(CCPoint{ m_position.x, m_position.y + 30 });
-      
-      m_gameLayer->m_objectLayer->addChild(m_fields->m_label2, 1000);
-    }
+    label->setScale(0.6);
+    label->setColor(settings.color);
+
+    label->setPosition(CCPoint{ player->getPositionX(), player->getPositionY() + 30 });
+    m_objectLayer->addChild(label, 1000);
+
+    m_fields->m_labels.push_back(label);
+  }
+
+  void onQuit() {
+    PlayLayer::onQuit();
+
+    for (auto label : m_fields->m_labels) m_objectLayer->removeChild(label);
+    m_fields->m_labels.clear();
   }
 };
 
 $on_mod(Loaded) {
   getPhrases();
-
   settings.enabled = Mod::get()->getSettingValue<bool>("enabled");
+  settings.maxLabels = Mod::get()->getSettingValue<int>("max-labels");
+
   settings.color = Mod::get()->getSettingValue<ccColor3B>("text-color");
 
   listenForSettingChanges<bool>("enabled", [](bool value) {
     settings.enabled = value;
+  });
+  listenForSettingChanges<int>("max-labels", [](int value) {
+    settings.maxLabels = value;
   });
 
   listenForSettingChanges<ccColor3B>("text-color", [](ccColor3B value) {

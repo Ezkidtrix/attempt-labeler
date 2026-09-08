@@ -1,5 +1,5 @@
 {
-	"geode": "5.8.2",
+	"geode": "5.10.1",
 	"gd": {
 		"win": "2.2081",
 		"android": "2.2081",
@@ -8,7 +8,7 @@
 	},
 	"id": "ezkidtrix.attempt-labeler",
 	"name": "Attempt Labeler",
-	"version": "v1.0.4",
+	"version": "v1.0.5",
 	"developer": "Ezkidtrix",
 	"description": "places a fun label where you last died",
 	"dependencies": {
@@ -23,6 +23,14 @@
 			"type": "bool",
 			"name": "Enable Mod",
 			"default": true
+		},
+		"max-labels": {
+			"type": "int",
+			"name": "Max Labels",
+			"description": "the maximum number of labels that can be displayed at once.",
+			"default": 10,
+			"min": 1,
+			"max": 100
 		},
 		"text-color": {
 			"type": "rgb",
