@@ -100,8 +100,6 @@ class $modify(MyPlayLayer, PlayLayer) {
     for (auto label : m_fields->m_labels) m_objectLayer->removeChild(label);
     m_fields->m_labels.clear();
   }
-
-  
 };
 
 $on_mod(Loaded) {
