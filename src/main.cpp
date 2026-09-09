@@ -94,12 +94,14 @@ class $modify(MyPlayLayer, PlayLayer) {
     m_fields->m_labels.push_back(label);
   }
 
-  void onQuit() {
-    PlayLayer::onQuit();
+  void onExit() {
+    PlayLayer::onExit();
 
     for (auto label : m_fields->m_labels) m_objectLayer->removeChild(label);
     m_fields->m_labels.clear();
   }
+
+  
 };
 
 $on_mod(Loaded) {
