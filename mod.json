@@ -32,6 +32,18 @@
 			"min": 1,
 			"max": 100
 		},
+		"options-title": {
+			"type": "title",
+			"name": "Label Options"
+		},
+		"y-offset": {
+			"type": "int",
+			"name": "Y Offset",
+			"description": "The offset on the y-axis that the label will display at based on the player's coordinates at death (higher = above player, lower = below player).",
+			"default": 30,
+			"min": -100,
+			"max": 100
+		},
 		"text-color": {
 			"type": "rgb",
 			"name": "Text Color",

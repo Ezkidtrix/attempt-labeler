@@ -9,9 +9,10 @@ using namespace geode::prelude;
 
 struct Settings {
   bool enabled = true;
-  int maxLabels = 10;
-
   ccColor3B color;
+
+  int yoff = 30;
+  int maxLabels = 10;
 };
 static Settings settings;
 
@@ -88,14 +89,14 @@ class $modify(MyPlayLayer, PlayLayer) {
     label->setScale(0.6);
     label->setColor(settings.color);
 
-    label->setPosition(CCPoint{ player->getPositionX(), player->getPositionY() + 30 });
+    label->setPosition(CCPoint{ player->getPositionX(), player->getPositionY() + settings.yoff });
     m_objectLayer->addChild(label, 1000);
 
     m_fields->m_labels.push_back(label);
   }
 
-  void onQuit() {
-    PlayLayer::onQuit();
+  void onExit() {
+    PlayLayer::onExit();
 
     for (auto label : m_fields->m_labels) m_objectLayer->removeChild(label);
     m_fields->m_labels.clear();
@@ -105,18 +106,22 @@ class $modify(MyPlayLayer, PlayLayer) {
 $on_mod(Loaded) {
   getPhrases();
   settings.enabled = Mod::get()->getSettingValue<bool>("enabled");
-  settings.maxLabels = Mod::get()->getSettingValue<int>("max-labels");
-
   settings.color = Mod::get()->getSettingValue<ccColor3B>("text-color");
+
+  settings.yoff = Mod::get()->getSettingValue<int>("y-offset");
+  settings.maxLabels = Mod::get()->getSettingValue<int>("max-labels");
 
   listenForSettingChanges<bool>("enabled", [](bool value) {
     settings.enabled = value;
   });
-  listenForSettingChanges<int>("max-labels", [](int value) {
-    settings.maxLabels = value;
-  });
-
   listenForSettingChanges<ccColor3B>("text-color", [](ccColor3B value) {
     settings.color = value;
+  });
+
+  listenForSettingChanges<int>("y-offset", [](int value) {
+    settings.yoff = value;
+  });
+  listenForSettingChanges<int>("max-labels", [](int value) {
+    settings.maxLabels = value;
   });
 };
