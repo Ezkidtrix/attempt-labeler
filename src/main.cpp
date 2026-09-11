@@ -68,6 +68,11 @@ class $modify(MyPlayLayer, PlayLayer) {
     if (!PlayLayer::init(level, useReplay, dontCreateObjects)) return false;
     if (!settings.enabled) return true;
 
+    this->addOnExitCallback([this]() {
+      for (auto label : m_fields->m_labels) m_objectLayer->removeChild(label);
+      m_fields->m_labels.clear();
+    });
+
     getPhrases();
     return true;
   }
@@ -93,13 +98,6 @@ class $modify(MyPlayLayer, PlayLayer) {
     m_objectLayer->addChild(label, 1000);
 
     m_fields->m_labels.push_back(label);
-  }
-
-  void keyBackClicked() {
-    PlayLayer::keyBackClicked();
-
-    for (auto label : m_fields->m_labels) m_objectLayer->removeChild(label);
-    m_fields->m_labels.clear();
   }
 };
 
