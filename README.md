@@ -1,6 +1,6 @@
 # Attempt Labeler
 A very simple geode mod that puts a label above the object that killed you. So, when you get back to that part you can have something to motivate to get further!
-**NOTE: on game pause, all the labels with be removed!**
+**NOTE: if you pause the game, all the labels with be removed!**
 
 # How to edit labels
 1. Close the game fully
