@@ -95,8 +95,8 @@ class $modify(MyPlayLayer, PlayLayer) {
     m_fields->m_labels.push_back(label);
   }
 
-  void onExit() {
-    PlayLayer::onExit();
+  void keyBackClicked() {
+    PlayLayer::keyBackClicked();
 
     for (auto label : m_fields->m_labels) m_objectLayer->removeChild(label);
     m_fields->m_labels.clear();
