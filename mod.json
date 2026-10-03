@@ -8,7 +8,7 @@
 	},
 	"id": "ezkidtrix.attempt-labeler",
 	"name": "Attempt Labeler",
-	"version": "v1.1.0",
+	"version": "v1.1.1",
 	"developer": "Ezkidtrix",
 	"description": "places a fun label where you last died",
 	"dependencies": {
@@ -34,13 +34,13 @@
 		},
 		"options-title": {
 			"type": "title",
-			"name": "Label Options"
+			"name": "Customization"
 		},
 		"y-offset": {
 			"type": "int",
 			"name": "Y Offset",
 			"description": "The offset on the y-axis that the label will display at based on the player's coordinates at death (higher = above player, lower = below player).",
-			"default": 30,
+			"default": 40,
 			"min": -100,
 			"max": 100
 		},

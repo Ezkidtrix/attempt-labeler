@@ -1,9 +1,15 @@
-#include "ccTypes.h"
-#include <Geode/cocos/label_nodes/CCLabelBMFont.h>
 #include <Geode/Geode.hpp>
-#include <Geode/loader/SettingV3.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/PlayerObject.hpp>
+
+#include <ccTypes.h>
+#include <Geode/loader/SettingV3.hpp>
+#include <Geode/cocos/label_nodes/CCLabelBMFont.h>
+
+#include <fstream>
+#include <string>
+#include <vector>
+#include <filesystem>
 
 using namespace geode::prelude;
 
@@ -19,8 +25,7 @@ static Settings settings;
 std::vector<std::string> phrases;
 
 void getPhrases() {
-  std::vector<std::string> phrasesSetting = Mod::get()->getSavedValue<std::vector<std::string>>("phrases");
-  std::vector<std::string> defaultPhrases = {
+  std::vector<std::string> temp = {
     "You got this!",
     "Keep going!",
     "One more attempt.",
@@ -43,11 +48,17 @@ void getPhrases() {
     "New strategy: survive."
   };
 
-  if (phrasesSetting.empty()) {
-    phrases = defaultPhrases;
-    Mod::get()->setSavedValue("phrases", defaultPhrases);
+  phrases.clear();
+  auto path = Mod::get()->getSaveDir() / "phrases.txt";
+
+  if (std::filesystem::exists(path)) {
+    std::ifstream file(path);
+    std::string phrase;
+
+    while (std::getline(file, phrase)) phrases.push_back(phrase);
   } else {
-    phrases = phrasesSetting;
+    std::ofstream file(path, std::ios::app);
+    for (int i = 0; i < temp.size(); i++) file << temp[i] << "\n";
   }
 }
 
