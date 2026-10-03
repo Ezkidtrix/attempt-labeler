@@ -3,9 +3,9 @@ A very simple geode mod that puts a label above the object that killed you. So, 
 **NOTE: if you pause the game, all the labels with be removed!**
 
 # How to edit labels
-1. Open the mod's save directory (typical paths are below)
-  *Win: "%localappdata%\GeometryDash"*
-  *Mac: "~/Library/Application Support/GeometryDash"*
+1. Open the mod's save directory (typical paths are below)<br>
+  *Win: "%localappdata%\GeometryDash"*<br>
+  *Mac: "~/Library/Application Support/GeometryDash"*<br>
   **it may be a different directory depending on your setup**
 2. Open the file named "phrases.txt"
 3. Either add new lines or change existing lines to whatever text you want
