@@ -47,11 +47,12 @@ void getPhrases() {
     "Perhaps try not dying.",
     "New strategy: survive."
   };
-
   phrases.clear();
-  auto path = Mod::get()->getSaveDir() / "phrases.txt";
 
-  if (std::filesystem::exists(path)) {
+  auto path = Mod::get()->getSaveDir() / "phrases.txt";
+  std::error_code ec;
+
+  if (std::filesystem::exists(path, ec)) {
     std::ifstream file(path);
     std::string phrase;
 
