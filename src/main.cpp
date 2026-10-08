@@ -15,10 +15,12 @@ using namespace geode::prelude;
 
 struct Settings {
   bool enabled = true;
-  ccColor3B color;
-
-  int yoff = 30;
   int maxLabels = 10;
+  
+  int yoff = 30;
+  float scale = 0.6f;
+
+  ccColor3B color;
 };
 static Settings settings;
 
@@ -102,11 +104,11 @@ class $modify(MyPlayLayer, PlayLayer) {
     
     std::string text = randomLabel();
     auto label = CCLabelBMFont::create(text.c_str(), "bigFont.fnt");
-    
-    label->setScale(0.6);
-    label->setColor(settings.color);
 
+    label->setScale(std::clamp(settings.scale, 0.1f, 5.0f));
     label->setPosition(CCPoint{ player->getPositionX(), player->getPositionY() + settings.yoff });
+
+    label->setColor(settings.color);
     m_objectLayer->addChild(label, 1000);
 
     m_fields->m_labels.push_back(label);
@@ -116,22 +118,28 @@ class $modify(MyPlayLayer, PlayLayer) {
 $on_mod(Loaded) {
   getPhrases();
   settings.enabled = Mod::get()->getSettingValue<bool>("enabled");
-  settings.color = Mod::get()->getSettingValue<ccColor3B>("text-color");
+  settings.maxLabels = Mod::get()->getSettingValue<int>("max-labels");
 
   settings.yoff = Mod::get()->getSettingValue<int>("y-offset");
-  settings.maxLabels = Mod::get()->getSettingValue<int>("max-labels");
+  settings.scale = Mod::get()->getSettingValue<float>("scale");
+
+  settings.color = Mod::get()->getSettingValue<ccColor3B>("text-color");
 
   listenForSettingChanges<bool>("enabled", [](bool value) {
     settings.enabled = value;
   });
-  listenForSettingChanges<ccColor3B>("text-color", [](ccColor3B value) {
-    settings.color = value;
+  listenForSettingChanges<int>("max-labels", [](int value) {
+    settings.maxLabels = value;
   });
 
   listenForSettingChanges<int>("y-offset", [](int value) {
     settings.yoff = value;
   });
-  listenForSettingChanges<int>("max-labels", [](int value) {
-    settings.maxLabels = value;
+  listenForSettingChanges<float>("scale", [](float value) {
+    settings.scale = value;
+  });
+
+  listenForSettingChanges<ccColor3B>("text-color", [](ccColor3B value) {
+    settings.color = value;
   });
 };
